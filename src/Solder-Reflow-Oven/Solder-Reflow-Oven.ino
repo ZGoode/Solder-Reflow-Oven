@@ -17,7 +17,7 @@
 #include <LiquidCrystal.h>
 
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-const int up = 6, down = 7, left = 8, right = 9, ok = 10, relay = 1;
+const int up = 6, down = 7, left = 8, right = 9, ok = 10, relay = 13, alwaysOn = 1;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 #define THERMISTORPIN A0
@@ -52,7 +52,7 @@ void setup() {
 
   digitalWrite(relay, LOW);
 
-  //  analogReference(EXTERNAL);
+  analogReference(EXTERNAL);
 
   lcd.begin(16, 2);
   lcd.print("Solder Oven");
@@ -85,6 +85,7 @@ void loop() {
   } else if (currentScreen == 1) { //temperature select scree
     if (firstDisplay == true) {
       lcd.clear();
+      lcd.blink();
       lcd.print("Set Temperature");
       lcd.setCursor(0, 1);
       int tempint = (hundreds * 100) + (tens * 10) + (ones);
@@ -152,6 +153,7 @@ void loop() {
       Serial.println(tens);
       Serial.println(ones);
       currentScreen++;
+      lcd.noBlink();
       lcd.clear();
       firstDisplay = true;
       delay(500);
