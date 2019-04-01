@@ -12,6 +12,8 @@
    10K resistor:
    ends to +5V and ground
    wiper to LCD VO pin (pin 3)
+   Relay to pin 13
+   AlwaysOnToggle to pin
 */
 
 #include <LiquidCrystal.h>
@@ -41,8 +43,6 @@ boolean firstAlwaysOn = true;
 long sampleTemp();
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("begin");
   pinMode(up, INPUT);
   pinMode(down, INPUT);
   pinMode(left, INPUT);
@@ -76,6 +76,7 @@ void loop() {
       lcd.setCursor(0, 0);
       lcd.clear();
       firstAlwaysOn = true;
+      firstDisplay = true;
     }
     if (currentScreen == 0) { //home screen
       if (firstDisplay == true) {
@@ -137,11 +138,11 @@ void loop() {
             hundreds--;
           }
         } else if (cursorPosition == 1) {
-          if (tens > 9) {
+          if (tens > 0) {
             tens--;
           }
         } else if (cursorPosition == 2) {
-          if (ones > 9) {
+          if (ones > 0) {
             ones--;
           }
         }
@@ -174,11 +175,6 @@ void loop() {
 
       if (digitalRead(ok) == HIGH) {
         setTemp = (hundreds * 100) + (tens * 10) + (ones);
-        Serial.println("setTemp: ");
-        Serial.println(setTemp);
-        Serial.println(hundreds);
-        Serial.println(tens);
-        Serial.println(ones);
         currentScreen++;
         lcd.noBlink();
         lcd.clear();
